@@ -21,10 +21,9 @@ function checkRole(roles) {
     roles.forEach((role) => {
       if (req.decodedToken.role === role) {
         next();
-      } else {
-        res.status(403).json({ message: "You don't have access to this" });
       }
     });
+    res.status(403).json({ message: "You don't have access to this" });
   };
 }
 
