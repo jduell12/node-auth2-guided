@@ -12,18 +12,23 @@ router.get("/", restricted, (req, res) => {
     .catch((err) => res.send(err));
 });
 
-router.put("/:id", restricted, checkRole(["admin"]), (req, res) => {
+router.put("/:id", restricted, checkRole(["user", "admin"]), (req, res) => {
   res.status(200).json({ message: "success" });
 });
 
+//checks an array of strings
 function checkRole(roles) {
   return function (req, res, next) {
-    roles.forEach((role) => {
-      if (req.decodedToken.role === role) {
-        next();
-      }
-    });
-    res.status(403).json({ message: "You don't have access to this" });
+    // roles.forEach((role) => {
+    //   if (req.decodedToken.role === role) {
+    //     next();
+    //   }
+    // });
+    if (roles.includes(req.decodedToken.role)) {
+      next();
+    } else {
+      res.status(403).json({ message: "You don't have access to this" });
+    }
   };
 }
 
